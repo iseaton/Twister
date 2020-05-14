@@ -11,9 +11,10 @@ import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
-
+    
+    let jsonURL: String = "https://iseaton.github.io/issues.json"
+    var json = [String: Any]()
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         return true
@@ -77,6 +78,128 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-
+    
+    func loadJSON() {
+        do {
+            let url = URL(string: jsonURL)!
+            let jsonData = try Data(contentsOf: url)
+            json = parseJSON(data: jsonData)
+        } catch {
+            print("Error loading JSON: \(error))")
+        }
+    }
+    
+    func parseJSON(data: Data) -> [String: Any] {
+        var dict: Dictionary = [String: Any]()
+        do {
+            if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                
+                if let title = json["magazine_title"] as? String {
+                    dict["magazine_title"] = title
+                }
+                
+                if let version = json["docs_version"] as? String {
+                    dict["docs_version"] = Version(dotSeparated: version)
+                }
+                
+                if let issues = json["issues"] as? [[String: String]] {
+                    dict["issues"] = issues
+                }
+                
+            }
+        } catch {
+            print("Error serializing JSON: \(error)")
+        }
+        return dict
+    }
+    
+    func updateData() {
+        
+        //skip if json fetch from web fails
+        if (json["docs_version"] as? Version) == nil {
+            return
+        }
+        
+        let serverVersion = json["docs_version"] as! Version
+        let defaults = UserDefaults.standard
+        
+        do {
+            if let local = defaults.value(forKey: "version") as? Data {
+                let localVersion = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(local) as! Version
+                if localVersion < serverVersion {
+                    print("Version \(serverVersion) is available! Beginning update...")
+                    mergeIssues()
+                    let data = try NSKeyedArchiver.archivedData(withRootObject: serverVersion, requiringSecureCoding: false)
+                    defaults.setValue(data, forKey: "version")
+                    print("Update complete!")
+                } else {
+                    print("Database is up to date.")
+                }
+            } else {
+                let data = try NSKeyedArchiver.archivedData(withRootObject: serverVersion, requiringSecureCoding: false)
+                defaults.setValue(data, forKey: "version")
+                print("First run! Current version is: \(serverVersion)")
+                restoreAllIssuesFromServer()
+            }
+        } catch {
+            print("Versioning failed: \(error)")
+        }
+    }
+    
+    func mergeIssues() {
+        print("Updated!")
+    }
+    
+    func addIssue(issueData: [String: String]) {
+        let context = self.persistentContainer.viewContext
+        let entity = NSEntityDescription.entity(forEntityName: "Issue", in: context)!
+        
+        let format = DateFormatter()
+        format.dateFormat = "yyyy-MM"
+        
+        let imageURL = URL(string: issueData["coverUrl"]!)!
+        let imageData = try! Data(contentsOf: imageURL)
+        //replace above with default image if none is found?
+        
+        let entry = Issue(entity: entity, insertInto: context)
+        
+        entry.uniqueID = Int16(issueData["uniqueID"]!)!
+        entry.version = Version(dotSeparated: issueData["version"]!)
+        entry.title = issueData["title"]!
+        entry.date = format.date(from: issueData["date"]!)!
+        entry.cover = UIImage(data: imageData)!
+        entry.fileType = issueData["type"]!
+        entry.webLocation = URL(string: issueData["contentUrl"]!)!
+        
+        do {
+            try context.save()
+        } catch {
+            print("Could not save the issue: \(error)")
+        }
+    }
+    
+    func restoreAllIssuesFromServer() {
+        
+        wipeLocalData()
+        
+        for issue in (json["issues"] as! [[String: String]]) {
+            addIssue(issueData: issue)
+        }
+        
+    }
+    
+    func wipeLocalData() {
+        let context = self.persistentContainer.viewContext
+        let request = NSFetchRequest<Issue>(entityName: "Issue")
+        do {
+            let results = try context.fetch(request)
+            for item in results {
+                context.delete(item)
+            }
+        } catch {
+           print("Search for local issues failed: \(error)")
+        }
+    }
+    
 }
 
