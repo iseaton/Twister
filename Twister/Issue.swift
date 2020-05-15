@@ -9,9 +9,9 @@
 import UIKit
 import CoreData
 
-class Issue: NSManagedObject {
+class Issue: NSManagedObject, Identifiable {
     
-    @NSManaged var uniqueID: Int16
+    @NSManaged var id: Int16
     @NSManaged var version: Version
     @NSManaged var title: String
     @NSManaged var cover: UIImage
@@ -21,7 +21,7 @@ class Issue: NSManagedObject {
     @NSManaged var fileLocation: String?
     @NSManaged var fileType: String
     
-    func quickset(id: Int16, title: String, cover: UIImage, date: Date, webLocation: URL, fileLocation: String?, fileType: String) {
+    /*func quickset(id: Int16, title: String, cover: UIImage, date: Date, webLocation: URL, fileLocation: String?, fileType: String) {
         self.uniqueID = id
         self.title = title
         self.cover = cover
@@ -29,6 +29,6 @@ class Issue: NSManagedObject {
         self.webLocation = webLocation
         self.fileLocation = fileLocation
         self.fileType = fileType
-    }
+    }*/
     
 }

@@ -6,13 +6,14 @@
 //  Copyright © 2020 Isaac Eaton. All rights reserved.
 //
 
+import SwiftUI
 import UIKit
 import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    let jsonURL: String = "https://iseaton.github.io/issues.json"
+    let jsonURL: String = "https://iseaton.github.io/issues3.json"
     var json = [String: Any]()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -147,7 +148,46 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func mergeIssues() {
-        print("Updated!")
+        
+        let context = self.persistentContainer.viewContext
+        let request = NSFetchRequest<Issue>(entityName: "Issue")
+        
+        var localIssues = [Int16: Issue]()
+        do {
+            let results = try context.fetch(request)
+            for issue in results {
+                localIssues[issue.id] = issue
+            }
+        } catch {
+            print("Could not execute search for issues: \(error)")
+        }
+        
+        var remoteIssueIDs = [Int16]()
+        
+        for remoteIssue in (json["issues"] as! [[String: String]]) {
+            let remoteID = Int16(remoteIssue["uniqueID"]!)!
+            let remoteVersion = Version(dotSeparated: remoteIssue["version"]!)
+            
+            remoteIssueIDs.append(remoteID)
+            
+            if let localIssue = localIssues[remoteID] {
+                if remoteVersion > localIssue.version {
+                    context.delete(localIssue)
+                    addIssue(issueData: remoteIssue)
+                    print("Replaced \(remoteIssue["title"]!)")
+                }
+            } else {
+                addIssue(issueData: remoteIssue)
+                print("Added \(remoteIssue["title"]!)")
+            }
+        }
+        
+        for (id, issue) in localIssues {
+            if !remoteIssueIDs.contains(id) {
+                context.delete(issue)
+                print("Deleted \(issue.title)")
+            }
+        }
     }
     
     func addIssue(issueData: [String: String]) {
@@ -162,8 +202,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //replace above with default image if none is found?
         
         let entry = Issue(entity: entity, insertInto: context)
-        
-        entry.uniqueID = Int16(issueData["uniqueID"]!)!
+        entry.id = Int16(issueData["uniqueID"]!)!
         entry.version = Version(dotSeparated: issueData["version"]!)
         entry.title = issueData["title"]!
         entry.date = format.date(from: issueData["date"]!)!

@@ -8,9 +8,11 @@
 
 import UIKit
 import SwiftUI
+import CoreData
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
+    var locdata = UserData()
     var window: UIWindow?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -23,7 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Create the SwiftUI view and set the context as the value for the managedObjectContext environment keyPath.
         // Add `@Environment(\.managedObjectContext)` in the views that will need the context.
-        let contentView = ContentView().environment(\.managedObjectContext, context)
+        let contentView = IssueList().environment(\.managedObjectContext, context).environmentObject(locdata)
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
@@ -44,10 +46,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidBecomeActive(_ scene: UIScene) {
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.'
-        
         let delegate = UIApplication.shared.delegate as! AppDelegate
         delegate.loadJSON()
         delegate.updateData()
+        loadIssues()
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
@@ -68,7 +70,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Save changes in the application's managed object context when the application transitions to the background.
         (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
     }
-
+    
+    func loadIssues() {
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        let context = delegate.persistentContainer.viewContext
+        let request = NSFetchRequest<Issue>(entityName: "Issue")
+        do {
+            let results =  try context.fetch(request)
+            print("Found \(results.count) issues.")
+            for item in results {
+                locdata.issues.append(item)
+            }
+            locdata.issues.sort(by: {$0.date > $1.date})
+        } catch {
+            print("Could not load local issues: \(error)")
+        }
+    }
+    
 }
 
 struct SceneDelegate_Previews: PreviewProvider {

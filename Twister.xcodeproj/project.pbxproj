@@ -16,6 +16,12 @@
 		34FBBB7D246CD32D00908494 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34FBBB7B246CD32D00908494 /* LaunchScreen.storyboard */; };
 		34FBBB85246CDD0F00908494 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FBBB84246CDD0F00908494 /* Version.swift */; };
 		34FBBB87246CE28200908494 /* Issue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FBBB86246CE28200908494 /* Issue.swift */; };
+		34FBBBB5246D511500908494 /* IssueList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FBBBB4246D511500908494 /* IssueList.swift */; };
+		34FBBBB7246D512300908494 /* IssueRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FBBBB6246D512300908494 /* IssueRow.swift */; };
+		34FBBBB9246D547900908494 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FBBBB8246D547900908494 /* UserData.swift */; };
+		34FBBBBB246D8FED00908494 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FBBBBA246D8FED00908494 /* ProgressBar.swift */; };
+		34FBBBBD246DA6EB00908494 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FBBBBC246DA6EB00908494 /* Download.swift */; };
+		34FBBBBF246E3ECA00908494 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34FBBBBE246E3ECA00908494 /* DownloadManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +36,12 @@
 		34FBBB7E246CD32D00908494 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		34FBBB84246CDD0F00908494 /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
 		34FBBB86246CE28200908494 /* Issue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issue.swift; sourceTree = "<group>"; };
+		34FBBBB4246D511500908494 /* IssueList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueList.swift; sourceTree = "<group>"; };
+		34FBBBB6246D512300908494 /* IssueRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueRow.swift; sourceTree = "<group>"; };
+		34FBBBB8246D547900908494 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		34FBBBBA246D8FED00908494 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
+		34FBBBBC246DA6EB00908494 /* Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
+		34FBBBBE246E3ECA00908494 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +79,12 @@
 				34FBBB84246CDD0F00908494 /* Version.swift */,
 				34FBBB86246CE28200908494 /* Issue.swift */,
 				34FBBB74246CD32B00908494 /* ContentView.swift */,
+				34FBBBB4246D511500908494 /* IssueList.swift */,
+				34FBBBB8246D547900908494 /* UserData.swift */,
+				34FBBBB6246D512300908494 /* IssueRow.swift */,
+				34FBBBBC246DA6EB00908494 /* Download.swift */,
+				34FBBBBE246E3ECA00908494 /* DownloadManager.swift */,
+				34FBBBBA246D8FED00908494 /* ProgressBar.swift */,
 				34FBBB76246CD32D00908494 /* Assets.xcassets */,
 				34FBBB7B246CD32D00908494 /* LaunchScreen.storyboard */,
 				34FBBB7E246CD32D00908494 /* Info.plist */,
@@ -157,9 +175,15 @@
 			files = (
 				34FBBB73246CD32B00908494 /* Twister.xcdatamodeld in Sources */,
 				34FBBB85246CDD0F00908494 /* Version.swift in Sources */,
+				34FBBBBD246DA6EB00908494 /* Download.swift in Sources */,
+				34FBBBB7246D512300908494 /* IssueRow.swift in Sources */,
+				34FBBBB9246D547900908494 /* UserData.swift in Sources */,
 				34FBBB6E246CD32B00908494 /* AppDelegate.swift in Sources */,
 				34FBBB75246CD32B00908494 /* ContentView.swift in Sources */,
+				34FBBBBF246E3ECA00908494 /* DownloadManager.swift in Sources */,
 				34FBBB70246CD32B00908494 /* SceneDelegate.swift in Sources */,
+				34FBBBB5246D511500908494 /* IssueList.swift in Sources */,
+				34FBBBBB246D8FED00908494 /* ProgressBar.swift in Sources */,
 				34FBBB87246CE28200908494 /* Issue.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
