@@ -13,6 +13,7 @@ import CoreData
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var locdata = UserData()
+    var downloadManager = DownloadManager()
     var window: UIWindow?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -25,7 +26,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Create the SwiftUI view and set the context as the value for the managedObjectContext environment keyPath.
         // Add `@Environment(\.managedObjectContext)` in the views that will need the context.
-        let contentView = IssueList().environment(\.managedObjectContext, context).environmentObject(locdata)
+        let contentView = IssueList().environment(\.managedObjectContext, context).environmentObject(locdata).environmentObject(downloadManager)
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {

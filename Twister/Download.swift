@@ -6,18 +6,21 @@
 //  Copyright © 2020 Isaac Eaton. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
 class Download {
     
-    var url: String
-    var isDownloading = false
-    var progress: Float = 0
+    var issue: Issue
+    var url: URL
     
-    var downloadTask: URLSessionDownloadTask?
+    var progress: Float = 0.0
+    
+    var task: URLSessionDownloadTask?
     var resumeData: Data?
     
-    init(url: String) {
-        self.url = url
+    init(issue: Issue) {
+        self.issue = issue
+        self.url = issue.webLocation
     }
+    
 }

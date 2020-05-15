@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import SwiftUI
 
 class Issue: NSManagedObject, Identifiable {
     
@@ -18,17 +19,7 @@ class Issue: NSManagedObject, Identifiable {
     @NSManaged var date: Date
     
     @NSManaged var webLocation: URL
-    @NSManaged var fileLocation: String?
+    @NSManaged var fileLocation: URL?
     @NSManaged var fileType: String
-    
-    /*func quickset(id: Int16, title: String, cover: UIImage, date: Date, webLocation: URL, fileLocation: String?, fileType: String) {
-        self.uniqueID = id
-        self.title = title
-        self.cover = cover
-        self.date = date
-        self.webLocation = webLocation
-        self.fileLocation = fileLocation
-        self.fileType = fileType
-    }*/
     
 }

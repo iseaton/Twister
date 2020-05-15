@@ -12,6 +12,8 @@ struct IssueRow: View {
     
     var issue: Issue
     
+    @EnvironmentObject var downloadManager: DownloadManager
+    
     @State var buttonState: ButtonState = .download
     @State var downloadProgress: Float = 0.0
     
@@ -64,25 +66,32 @@ struct IssueRow: View {
             ProgressBar(value: $downloadProgress)
                 .frame(height: 4)
                 .opacity(buttonState == .cancel ? 1.0 : 0.0)
+            
+            /*if isDownloading {
+            //ProgressBar(value: downloadManager.activeDownloads[issue.webLocation]?.$progress)
+            ProgressBar(value: (downloadManager.activeDownloads[issue.webLocation]?.$progress) )
+                .frame(height: 4)
+                .opacity(buttonState == .cancel ? 1.0 : 0.0)
+            }*/
         }
         .padding(.horizontal, -15)
         .padding(.bottom, -6)
     }
     
     private func downloadIssue() {
+        downloadManager.startDownload(issue: issue)
         buttonState = .cancel
-        for _ in 0...1000 {
-            downloadProgress += 0.001
-        }
+        downloadProgress = downloadManager.activeDownloads[issue.webLocation]!.progress
+        //TODO make this actually update the view
     }
     
     private func cancelDownload() {
-        buttonState = .view
+        downloadManager.cancelDownload(issue: issue)
     }
     
 }
 
-enum ButtonState:String {
+enum ButtonState: String {
     case download = "Download"
     case cancel = "Cancel"
     case view = "View"

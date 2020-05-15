@@ -3,7 +3,7 @@
     <entity name="Issue" representedClassName=".Issue" syncable="YES">
         <attribute name="cover" optional="YES" attributeType="Transformable"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="fileLocation" optional="YES" attributeType="String"/>
+        <attribute name="fileLocation" optional="YES" attributeType="Transformable"/>
         <attribute name="fileType" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String"/>
